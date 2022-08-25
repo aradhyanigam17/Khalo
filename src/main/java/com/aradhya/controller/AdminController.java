@@ -7,9 +7,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Controller
 public class AdminController {
-
     @Autowired
     CategoryService categoryService ;
 
@@ -45,10 +46,15 @@ public class AdminController {
         return "redirect:/admin/categories" ; //and then redirect to admin/categories
     }
 
-    @GetMapping("/admin/categories/update/{id}")
+    @GetMapping("/admin/categories/update/{id}")  //@get mapping is used bcz we are working with view page i.e html page
     public String updateCategory(@PathVariable int id , Model model){
-
-
-
+       Optional<Category> category = categoryService.getCategoryById(id);
+       if(category.isPresent()){
+           model.addAttribute("category", category.get()) ;
+           return "categoriesAdd" ;
+       }
+       else {
+           return "404" ;
+       }
     }
 }
